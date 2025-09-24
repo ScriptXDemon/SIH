@@ -3,11 +3,7 @@ pragma solidity ^0.8.20;
 
 contract TouristID {
     struct Tourist {
-        string name;
-        string nationality;
-        string passportOrAadhaar;
-        string itinerary;
-        string emergencyContact;
+        bytes32 dataHash; // A single hash of all personal data
         uint256 startDate;
         uint256 endDate;
         bool isActive;
@@ -15,7 +11,7 @@ contract TouristID {
 
     mapping(address => Tourist) private tourists;
 
-    event TouristRegistered(address indexed wallet, string name, uint256 startDate, uint256 endDate);
+    event TouristRegistered(address indexed wallet, bytes32 dataHash, uint256 startDate, uint256 endDate);
     event TouristExpired(address indexed wallet);
 
     modifier onlyActive(address _wallet) {
@@ -24,30 +20,30 @@ contract TouristID {
         _;
     }
 
+    /**
+     * @dev Registers a new tourist by storing a hash of their personal data.
+     * @param _wallet The tourist's wallet address.
+     * @param _dataHash A Keccak256 hash of the concatenated tourist information.
+     * @param _startDate The start date of the tourist pass (Unix timestamp).
+     * @param _endDate The end date of the tourist pass (Unix timestamp).
+     */
     function registerTourist(
         address _wallet,
-        string memory _name,
-        string memory _nationality,
-        string memory _passportOrAadhaar,
-        string memory _itinerary,
-        string memory _emergencyContact,
+        bytes32 _dataHash,
         uint256 _startDate,
         uint256 _endDate
     ) public {
+    
         require(_endDate > _startDate, "End date must be after start date");
 
         tourists[_wallet] = Tourist({
-            name: _name,
-            nationality: _nationality,
-            passportOrAadhaar: _passportOrAadhaar,
-            itinerary: _itinerary,
-            emergencyContact: _emergencyContact,
+            dataHash: _dataHash,
             startDate: _startDate,
             endDate: _endDate,
             isActive: true
         });
 
-        emit TouristRegistered(_wallet, _name, _startDate, _endDate);
+        emit TouristRegistered(_wallet, _dataHash, _startDate, _endDate);
     }
 
     function getTourist(address _wallet) public view onlyActive(_wallet) returns (Tourist memory) {
