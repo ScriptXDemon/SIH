@@ -1,0 +1,17 @@
+Privacy Policy for Tourist Digital ID dApp
+
+1. Purpose: This dApp collects and processes your personal data (name, passport/Aadhaar number, travel dates) for the purpose of digital tourist identification. Only a cryptographic hash of your data is stored on the blockchain.
+
+2. Consent: By registering, you explicitly consent to the processing of your data as described.
+
+3. Data Rights: You may request to expire your Tourist ID (mark as inactive) at any time. No raw personal data is stored on-chain.
+
+4. Data Minimization: Only the minimum data required for identification is processed and stored as a hash.
+
+5. Security: All data is hashed before being sent to the blockchain. No raw personal data is exposed on-chain.
+
+6. User Rights: For correction or erasure, please use the 'Expire Tourist' feature or contact the dApp administrator.
+
+7. Contact: For any privacy concerns, contact the dApp administrator.
+
+This policy is designed to help comply with the DPDP Act 2023. For more information, see the full Act text or consult a legal advisor.

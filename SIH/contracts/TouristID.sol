@@ -51,9 +51,7 @@ contract TouristID {
     }
 
     function expireTourist(address _wallet) public {
-        if (block.timestamp > tourists[_wallet].endDate) {
-            tourists[_wallet].isActive = false;
-            emit TouristExpired(_wallet);
-        }
+        tourists[_wallet].isActive = false;
+        emit TouristExpired(_wallet);
     }
 }
