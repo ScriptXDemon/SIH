@@ -1,12 +1,12 @@
 import { keccak256, toHex } from "viem";
 import hre from "hardhat";
+import { Contract } from "ethers";
 
 // --- Configuration ---
 // IMPORTANT: Replace this with the actual address after you run the deploy script
-const CONTRACT_ADDRESS = "YOUR_DEPLOYED_CONTRACT_ADDRESS"; 
+const CONTRACT_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";;
 
 // --- Mock Data ---
-// This is the tourist data we will register.
 const mockTouristData = {
   walletAddress: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", // The first Hardhat test account
   name: "John Doe",
@@ -18,10 +18,7 @@ const mockTouristData = {
 
 // --- Main Function ---
 async function main() {
-  if (CONTRACT_ADDRESS === "YOUR_DEPLOYED_CONTRACT_ADDRESS") {
-    console.error("❌ Error: Please replace 'YOUR_DEPLOYED_CONTRACT_ADDRESS' in the script with the actual contract address.");
-    return;
-  }
+  // Proceed without placeholder check
   
   console.log("Preparing to register a new tourist...");
 
@@ -35,11 +32,13 @@ async function main() {
   const thirtyDaysInSeconds = 30 * 24 * 60 * 60;
   const startDate = BigInt(now);
   const endDate = BigInt(now + thirtyDaysInSeconds);
-  console.log(`🗓️  Pass valid from ${new Date(Number(startDate) * 1000).toLocaleString()} to ${new Date(Number(endDate) * 1000).toLocaleString()}`);
+  console.log(`🗓️ Pass valid from ${new Date(Number(startDate) * 1000).toLocaleString()} to ${new Date(Number(endDate) * 1000).toLocaleString()}`);
 
 
-  // 3. Get the Contract and Call the 'registerTourist' Function
-  const touristID = await hre.ethers.getContractAt("TouristID", CONTRACT_ADDRESS);
+  // 3. Get the Contract and Call the 'registerTourist' Function (Ethers style)
+  const [signer] = await (hre as any).ethers.getSigners();
+  const TouristID = await (hre as any).ethers.getContractFactory("TouristID", signer);
+  const touristID = TouristID.attach(CONTRACT_ADDRESS) as Contract;
 
   console.log("\n📡 Sending transaction to register tourist...");
   const tx = await touristID.registerTourist(
@@ -48,9 +47,7 @@ async function main() {
     startDate,
     endDate
   );
-
-  // Wait for the transaction to be mined
-  await tx.wait();
+  const receipt = await tx.wait();
   console.log(`✅ Transaction successful! Hash: ${tx.hash}`);
 
   // 4. Verify the Data
@@ -64,7 +61,6 @@ async function main() {
   console.log("End Date (timestamp):", registeredTourist.endDate.toString());
   console.log("Is Active:", registeredTourist.isActive);
   console.log("---------------------------------");
-
 }
 
 main().catch((error) => {

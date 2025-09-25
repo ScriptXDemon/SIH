@@ -1,9 +1,9 @@
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox"; // includes ethers, waffle, chai, etc.
+import "@nomicfoundation/hardhat-ethers";
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.28", // or "0.8.20", just be consistent with your contracts
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
@@ -14,10 +14,6 @@ const config: HardhatUserConfig = {
   networks: {
     localhost: {
       url: "http://127.0.0.1:8545/",
-    },
-    sepolia: {
-      url: process.env.SEPOLIA_RPC_URL || "",
-      accounts: process.env.SEPOLIA_PRIVATE_KEY ? [process.env.SEPOLIA_PRIVATE_KEY] : [],
     },
   },
 };

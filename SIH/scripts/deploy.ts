@@ -3,15 +3,17 @@ import hre from "hardhat";
 async function main() {
   console.log("Deploying TouristID contract...");
 
-  const TouristID = await hre.ethers.getContractFactory("TouristID");
+
+
+  // Get signer from Hardhat
+  // Use ethers directly from hardhat
+  const [deployer] = await (hre as any).ethers.getSigners();
+  const TouristID = await (hre as any).ethers.getContractFactory("TouristID", deployer);
   const touristID = await TouristID.deploy();
 
-  await touristID.waitForDeployment();
+  console.log(`✅ TouristID contract deployed at: ${touristID.target}`);
 
-  const contractAddress = await touristID.getAddress();
-  console.log(`✅ TouristID contract deployed at: ${contractAddress}`);
-
-  return { contractAddress };
+  return { contractAddress: touristID.target };
 }
 
 main().catch((error) => {
